@@ -37,6 +37,7 @@ import com.ralphmarondev.familysprout.features.auth.presentation.components.Pass
 
 @Composable
 fun LoginScreen(
+    navigateToHome: () -> Unit,
     goToRegister: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
@@ -95,7 +96,7 @@ fun LoginScreen(
         }
 
         Button(
-            onClick = {},
+            onClick = { navigateToHome() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,12 +30,20 @@ import com.ralphmarondev.familysprout.features.auth.presentation.login.LoginScre
 import com.ralphmarondev.familysprout.features.auth.presentation.register.RegisterScreen
 
 @Composable
-fun AuthScreen(viewModel: AuthViewModel = viewModel()) {
+fun AuthScreen(
+    darkTheme: Boolean,
+    toggleDarkTheme: () -> Unit,
+    navigateToHome: () -> Unit,
+    viewModel: AuthViewModel = viewModel()
+) {
     var selectedScreen by remember { mutableIntStateOf(0) }
 
     Scaffold(
         topBar = {
-            AuthScreenTopBar()
+            AuthScreenTopBar(
+                darkTheme = darkTheme,
+                toggleDarkTheme = toggleDarkTheme
+            )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -51,7 +60,10 @@ fun AuthScreen(viewModel: AuthViewModel = viewModel()) {
                     contentAlignment = Alignment.Center
                 ) {
                     AnimatedVisibility(selectedScreen == 0) {
-                        LoginScreen(goToRegister = { selectedScreen = 1 })
+                        LoginScreen(
+                            goToRegister = { selectedScreen = 1 },
+                            navigateToHome = navigateToHome
+                        )
                     }
 
                     AnimatedVisibility(selectedScreen == 1) {
@@ -66,7 +78,10 @@ fun AuthScreen(viewModel: AuthViewModel = viewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AuthScreenTopBar() {
+private fun AuthScreenTopBar(
+    darkTheme: Boolean,
+    toggleDarkTheme: () -> Unit
+) {
     TopAppBar(
         title = {
             Text(
@@ -76,10 +91,12 @@ private fun AuthScreenTopBar() {
         },
         actions = {
             IconButton(
-                onClick = {}
+                onClick = toggleDarkTheme
             ) {
+                val icon = if (darkTheme) Icons.Outlined.LightMode else Icons.Outlined.DarkMode
+
                 Icon(
-                    imageVector = Icons.Outlined.LightMode,
+                    imageVector = icon,
                     contentDescription = ""
                 )
             }
