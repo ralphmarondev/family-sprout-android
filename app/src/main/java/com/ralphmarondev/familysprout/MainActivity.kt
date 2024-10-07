@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.ralphmarondev.familysprout.features.auth.presentation.AuthScreen
 import com.ralphmarondev.familysprout.ui.theme.FamilySproutTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FamilySproutTheme {
-
+                AuthScreen()
             }
         }
     }
