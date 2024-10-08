@@ -35,7 +35,11 @@ fun AppNavigation(
             )
         }
         composable<Screens.Home> {
-            HomeScreen(logout = { navController.navigateUp() })
+            HomeScreen(
+                logout = { navController.navigateUp() },
+                navigateToNewFamily = {},
+                navigateToFamilyList = {}
+            )
         }
     }
 }
