@@ -4,7 +4,11 @@ import com.ralphmarondev.familysprout.core.model.User
 import com.ralphmarondev.familysprout.features.auth.domain.repositories.AuthRepository
 
 class RegisterUseCase(private val authRepository: AuthRepository) {
-    suspend operator fun invoke(user: User) {
+    suspend fun registerUser(user: User) {
         authRepository.registerUser(user)
+    }
+
+    suspend fun isUsernameTaken(username: String): Boolean {
+        return authRepository.isUsernameTaken(username)
     }
 }

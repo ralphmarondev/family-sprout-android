@@ -1,5 +1,6 @@
 package com.ralphmarondev.familysprout.features.auth.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,8 +33,10 @@ import com.ralphmarondev.familysprout.features.auth.presentation.components.Pass
 
 @Composable
 fun RegisterScreen(
-    backToLogin: () -> Unit
+    backToLogin: () -> Unit,
+    onRegister: (String, String, String) -> Unit
 ) {
+    val context = LocalContext.current
     var fullName by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -123,7 +127,29 @@ fun RegisterScreen(
         }
 
         Button(
-            onClick = {},
+            onClick = {
+                if (accept) {
+                    if (fullName.trim().isNotEmpty() && username.trim()
+                            .isNotEmpty() && password.trim().isNotEmpty()
+                    ) {
+                        if (password.trim() == confirmPassword.trim()) {
+                            onRegister(fullName.trim(), username.trim(), password.trim())
+                        } else {
+                            Toast.makeText(context, "Password did not matched!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Please fill in all fields!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "You must accept terms and condition first!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)

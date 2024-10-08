@@ -1,5 +1,6 @@
 package com.ralphmarondev.familysprout.features.auth.presentation.login
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,9 +39,10 @@ import com.ralphmarondev.familysprout.features.auth.presentation.components.Pass
 
 @Composable
 fun LoginScreen(
-    navigateToHome: () -> Unit,
-    goToRegister: () -> Unit
+    goToRegister: () -> Unit,
+    onLogin: (String, String) -> Unit
 ) {
+    val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -96,7 +99,13 @@ fun LoginScreen(
         }
 
         Button(
-            onClick = { navigateToHome() },
+            onClick = {
+                if (username.trim().isNotEmpty() && password.trim().isNotEmpty()) {
+                    onLogin(username.trim(), password.trim())
+                } else {
+                    Toast.makeText(context, "Please fill in all fields!", Toast.LENGTH_SHORT).show()
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)

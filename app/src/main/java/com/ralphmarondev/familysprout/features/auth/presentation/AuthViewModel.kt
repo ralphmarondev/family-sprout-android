@@ -16,20 +16,32 @@ class AuthViewModel : ViewModel() {
     private val loginUseCase = LoginUseCase(authRepository)
     private val registerUseCase = RegisterUseCase(authRepository)
 
-    fun login(username: String, password: String, onSuccess: (User?) -> Unit) {
+    fun login(username: String, password: String, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
-            val user = loginUseCase(username, password)
-            onSuccess(user)
+            try {
+                val isAuthenticated = loginUseCase(username, password)
+                onComplete(isAuthenticated)
+            } catch (ex: Exception) {
+                Log.d("AUTH", "Login Error: ${ex.message}")
+                onComplete(false)
+            }
         }
     }
 
-    fun register(user: User, onComplete: () -> Unit) {
+    fun register(user: User, onComplete: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             try {
-                registerUseCase(user)
-                onComplete()
+                val isTaken = registerUseCase.isUsernameTaken(user.username)
+
+                if (isTaken) {
+                    onComplete(false, "Username is already taken.")
+                } else {
+                    registerUseCase.registerUser(user)
+                    onComplete(true, null)
+                }
             } catch (ex: Exception) {
                 Log.d("AUTH", "Registration Error: ${ex.message}")
+                onComplete(false, ex.message)
             }
         }
     }

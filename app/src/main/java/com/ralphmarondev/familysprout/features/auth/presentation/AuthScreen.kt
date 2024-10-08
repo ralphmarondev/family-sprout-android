@@ -1,5 +1,6 @@
 package com.ralphmarondev.familysprout.features.auth.presentation
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,8 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ralphmarondev.familysprout.core.model.User
 import com.ralphmarondev.familysprout.features.auth.presentation.login.LoginScreen
 import com.ralphmarondev.familysprout.features.auth.presentation.register.RegisterScreen
 
@@ -36,6 +39,7 @@ fun AuthScreen(
     navigateToHome: () -> Unit,
     viewModel: AuthViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     var selectedScreen by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -62,17 +66,51 @@ fun AuthScreen(
                     AnimatedVisibility(selectedScreen == 0) {
                         LoginScreen(
                             goToRegister = { selectedScreen = 1 },
-                            navigateToHome = navigateToHome
+                            onLogin = { username, password ->
+                                viewModel.login(username, password) { isAuthenticated ->
+                                    if (isAuthenticated) {
+                                        navigateToHome()
+                                    } else {
+                                        Toast.makeText(context, "Login Failed!", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                }
+                            }
                         )
                     }
 
                     AnimatedVisibility(selectedScreen == 1) {
-                        RegisterScreen(backToLogin = { selectedScreen = 0 })
+                        RegisterScreen(
+                            backToLogin = { selectedScreen = 0 },
+                            onRegister = { fullName, username, password ->
+                                viewModel.register(
+                                    user = User(
+                                        fullName = fullName,
+                                        username = username,
+                                        password = password
+                                    )
+                                ) { isSuccess, response ->
+                                    if (isSuccess) {
+                                        Toast.makeText(
+                                            context,
+                                            "User registered successfully!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        selectedScreen = 0
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Failed registering user. $response",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        )
                     }
                 }
             }
         }
-
     }
 }
 
