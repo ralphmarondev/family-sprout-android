@@ -178,7 +178,7 @@ fun HomeScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         FeatureCard(
-                            text = "Sarah",
+                            text = "New Family",
                             image = R.drawable.sarah,
                             onClick = navigateToFamilyList,
                             modifier = Modifier
@@ -186,7 +186,7 @@ fun HomeScreen(
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         FeatureCard(
-                            text = "Ralph",
+                            text = "Family List",
                             image = R.drawable.cute_me,
                             onClick = navigateToNewFamily,
                             modifier = Modifier

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ralphmarondev.familysprout.features.auth.presentation.AuthScreen
 import com.ralphmarondev.familysprout.features.home.presentation.HomeScreen
+import com.ralphmarondev.familysprout.features.newfamily.presentation.NewFamilyScreen
 import kotlinx.serialization.Serializable
 
 class Screens {
@@ -15,6 +16,9 @@ class Screens {
 
     @Serializable
     data object Home
+
+    @Serializable
+    data object NewFamily
 }
 
 @Composable
@@ -37,8 +41,13 @@ fun AppNavigation(
         composable<Screens.Home> {
             HomeScreen(
                 logout = { navController.navigateUp() },
-                navigateToNewFamily = {},
+                navigateToNewFamily = { navController.navigate(Screens.NewFamily) },
                 navigateToFamilyList = {}
+            )
+        }
+        composable<Screens.NewFamily> {
+            NewFamilyScreen(
+                onBack = { navController.navigateUp() }
             )
         }
     }

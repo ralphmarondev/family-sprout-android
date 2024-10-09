@@ -5,12 +5,16 @@ import androidx.room.PrimaryKey
 import com.ralphmarondev.familysprout.core.util.getCurrentDateInString
 
 @Entity
-data class User(
+data class Family(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val fullName: String,
-    val username: String,
-    val password: String,
+    val husband: Int,
+    val husbandName: String,
+    val wife: Int,
+    val wifeName: String,
+    val childCount: Int = 0,
+    val homeTown: String,
+    val remarks: String,
     val createdBy: String = "System",
     val dateCreated: String = getCurrentDateInString(),
     val isDeleted: Boolean = false
