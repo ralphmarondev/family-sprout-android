@@ -83,4 +83,7 @@ dependencies {
     kapt(libs.androidx.room.compiler)
 
     implementation(libs.coil.compose)
+
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
 }
